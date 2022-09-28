@@ -4,15 +4,15 @@
  */
 package session2;
 
-/**
- *
- * @author Learning Lab
- */
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Login extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Login
-     */
+    Statement stmt = null;
+    ResultSet rs = null;
+    
     public Login() {
         initComponents();
         this.setVisible(true);
@@ -39,6 +39,7 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
         setBackground(new java.awt.Color(255, 255, 255));
+        setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sign In to EM Management", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica", 1, 14))); // NOI18N
 
@@ -129,8 +130,23 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        System.out.println(txtUsername.getText());
-        System.out.println(txtPassword.getPassword());
+        try {
+            stmt = DBConnect.getConn().createStatement();
+            
+            String query = "SELECT * FROM Employees";
+            
+            rs = stmt.executeQuery(query);
+            
+            while(rs.next()) {
+                System.out.println(rs.getString("FirstName") + " " + rs.getString("LastName"));
+            }
+            
+            stmt.close();
+            rs.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnOkActionPerformed
 
 
